@@ -4,10 +4,11 @@ import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import App from './components/App';
+import { io } from "socket.io-client";
 
 const initialState = {
   username: "",
-  socket: null
+  socket: io()
 };
 
 function reducer(state = initialState, action) {

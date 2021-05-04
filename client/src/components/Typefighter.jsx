@@ -11,7 +11,6 @@ function Typefighter(props) {
 
   useEffect(() => {
     if (!props.socket) return;
-
     props.socket.on("connect", () => {
       props.socket.emit("clientMessage", `${props.username} connected!`);
     });
