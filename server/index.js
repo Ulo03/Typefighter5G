@@ -11,20 +11,21 @@ const io = require("socket.io")(server, {
 });
 
 app.use(express.static("public"));
+var allClients = [];
 
 io.on("connection", function(socket) { // neue Verbindung eines Clients
-  console.log("user connected..."); 
+  console.log(`Socket <${socket.id}> connected...`); 
+  allClients.push(socket);
   
   socket.on("clientMessage", function(message) { // neue Nachricht
       console.log(message + " (login)");
-      socket.broadcast.emit("serverMessage", "phillip schreibt man mit 2 l");
   });
 
   socket.on("disconnect", function() {
-    console.log("disconnect");
+    console.log(`Socket <${socket.id}> disconnected...`);
+    let i = allClients.indexOf(socket);
+    allClients.splice(i, 1);
   });
-
-  
 });
 
 
