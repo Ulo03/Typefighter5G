@@ -1,11 +1,17 @@
-import './App.css';
+import React, { useEffect, useState } from 'react'
+import { connect } from "react-redux";
+import Typefighter from "./Typefighter";
+import Login from "./Login";
 
-function App() {
-  return (
-    <div className="App">
-      App works!
-    </div>
-  );
+function App(props) {
+
+  return (props.username ? <Typefighter /> : <Login />);
 }
 
-export default App;
+function mapStateToProps(state) {
+  return {
+    username: state.username
+  }
+}
+
+export default connect(mapStateToProps, null)(App);

@@ -5,10 +5,17 @@ import { Provider } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import App from './components/App';
 
-const initialState = {};
+const initialState = {
+  username: "",
+  socket: null
+};
 
 function reducer(state = initialState, action) {
   switch (action.type) {
+    case "SET_USERNAME":
+      return { ...state, username: action.data };
+    case "SET_SOCKET":
+      return { ...state, socket: action.data };
     default:
       return state;
   }
