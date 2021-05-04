@@ -6,24 +6,19 @@ import { Container } from "react-bootstrap";
 
 function Typefighter(props) {
 
-  function printGrid() {
-    console.log(props.grid);
-  }
-
   useEffect(() => {
     props.setSocket(io("http://127.0.0.1:3001"));
-  }, []);
+  });
 
   useEffect(() => {
     if (!props.socket) return;
     props.socket.on("connect", () => {
       props.socket.emit("clientMessage", props.username);
     });
-
   }, [props.socket])
 
   return (
-    <Container onClick={printGrid}>
+    <Container>
       Typefighter works!
     </Container>
   )

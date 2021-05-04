@@ -8,7 +8,14 @@ import { io } from "socket.io-client";
 
 const initialState = {
   username: "",
-  socket: io()
+  socket: io(),
+  grid: [
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0]
+  ]
 };
 
 function reducer(state = initialState, action) {
@@ -17,6 +24,14 @@ function reducer(state = initialState, action) {
       return { ...state, username: action.data };
     case "SET_SOCKET":
       return { ...state, socket: action.data };
+    case "SET_CELL":
+      return {...state, grid: state.grid.map((e, i) => {
+        if (i !== action.row) return e;
+        return e.map((e2, i2) => {
+          if (i2 !== action.col) return e2;
+          return action.state;
+        });
+      })};
     default:
       return state;
   }

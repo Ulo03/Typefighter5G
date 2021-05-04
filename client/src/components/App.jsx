@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { connect } from "react-redux";
 import Typefighter from "./Typefighter";
 import Login from "./Login";
 
 function App(props) {
-
   return (props.username ? <Typefighter /> : <Login />);
 }
 

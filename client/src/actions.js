@@ -12,3 +12,12 @@ export function setSocket(socket) {
     data: socket
   }
 }
+
+export function setCell(row, col, state) {
+  return {
+    type: "SET_CELL",
+    row: row,
+    col: col,
+    state: state
+  }
+}
