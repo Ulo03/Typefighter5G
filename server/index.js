@@ -12,19 +12,23 @@ const io = require("socket.io")(server, {
 
 app.use(express.static("public"));
 var allClients = [];
+var allUsernames = [];
 
 io.on("connection", function(socket) { // neue Verbindung eines Clients
-  console.log(`Socket <${socket.id}> connected...`); 
+  console.log(`Socket <${socket.id}> connected...`);
   allClients.push(socket);
+  let si = allClients.indexOf(socket);
   
-  socket.on("clientMessage", function(message) { // neue Nachricht
-      console.log(message + " (login)");
+  socket.on("sendUsername", function(message) {
+    allUsernames[si] = message;
+    console.log(allUsernames[si] + " logged in!");
   });
 
   socket.on("disconnect", function() {
     console.log(`Socket <${socket.id}> disconnected...`);
-    let i = allClients.indexOf(socket);
-    allClients.splice(i, 1);
+    console.log(allUsernames[si] + " logged out!");
+    allClients.splice(si, 1);
+    allUsernames.splice(si, 1);
   });
 });
 
