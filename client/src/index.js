@@ -8,6 +8,7 @@ import { io } from "socket.io-client";
 
 const initialState = {
   username: "",
+  socketURL: "http://127.0.0.1:3001",
   socket: io(),
   grid: [
     [0, 0, 0, 0, 0],

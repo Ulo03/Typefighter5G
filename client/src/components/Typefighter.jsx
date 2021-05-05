@@ -8,8 +8,8 @@ import Lobby from "./Lobby";
 function Typefighter(props) {
 
   useEffect(() => {
-    props.setSocket(io("http://127.0.0.1:3001"));
-  }, []);
+    props.setSocket(io(props.socketURL));
+  }, [props.socketURL]);
 
   useEffect(() => {
     if (!props.socket) return;
@@ -31,6 +31,7 @@ function Typefighter(props) {
 function mapStateToProps(state) {
   return {
     username: state.username,
+    socketURL: state.socketURL,
     socket: state.socket,
     host: state.host,
     join: state.join
