@@ -15,7 +15,9 @@ const initialState = {
     [0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0]
-  ]
+  ],
+  host: 0,
+  join: 0
 };
 
 function reducer(state = initialState, action) {
@@ -32,6 +34,10 @@ function reducer(state = initialState, action) {
           return action.state;
         });
       })};
+    case "SET_HOST":
+      return { ...state, host: action.data };
+    case "SET_JOIN":
+      return { ...state, join: action.data };
     default:
       return state;
   }

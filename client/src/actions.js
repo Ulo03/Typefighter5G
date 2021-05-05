@@ -21,3 +21,17 @@ export function setCell(row, col, state) {
     state: state
   }
 }
+
+export function setHost(val) {
+  return {
+    type: "SET_HOST",
+    data: val
+  }
+}
+
+export function setJoin(val) {
+  return {
+    type: "SET_JOIN",
+    data: val
+  }
+}
