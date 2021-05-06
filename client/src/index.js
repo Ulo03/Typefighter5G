@@ -8,7 +8,7 @@ import { io } from "socket.io-client";
 
 const initialState = {
   username: "",
-  socketURL: "http://127.0.0.1:3001",
+  socketURL: "http://127.0.0.1:80",
   socket: io(),
   grid: [
     [0, 0, 0, 0, 0],
@@ -39,6 +39,8 @@ function reducer(state = initialState, action) {
       return { ...state, host: action.data };
     case "SET_JOIN":
       return { ...state, join: action.data };
+    case "SET_SOCKET_URL":
+      return { ...state, socketURL: action.data };
     default:
       return state;
   }

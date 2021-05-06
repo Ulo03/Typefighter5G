@@ -32,12 +32,10 @@ io.on("connection", function(socket) { // neue Verbindung eines Clients
   });
 });
 
-
-
 app.get('/', (req, res) => {
   res.send('<h1>Hello world</h1>');
 });
 
-server.listen(3001, () => {
-  console.log('listening on *:3001');
+server.listen(80, () => {
+  console.log('listening on *:80');
 });

@@ -35,3 +35,10 @@ export function setJoin(val) {
     data: val
   }
 }
+
+export function setSocketURL(url) {
+  return {
+    type: "SET_SOCKET_URL",
+    data: url
+  }
+}
