@@ -1,11 +1,11 @@
 import React from 'react'
-import { Container, FormControl, InputGroup, Button } from "react-bootstrap";
+import { Container, FormControl, InputGroup, Button, Form } from "react-bootstrap";
 import { connect } from "react-redux";
 import { setUsername } from "../actions";
 
 function Login(props) {
 
-  function test() {
+  function sendUsername() {
     let name = document.getElementById("username").value;
     if (name.length > 0) {
       props.setUsername(name);
@@ -21,7 +21,7 @@ function Login(props) {
           aria-describedby="basic-addon2"
         />
         <InputGroup.Append>
-          <Button variant="outline-secondary" onClick={test}>CONFIRM USERNAME</Button>
+          <Button variant="outline-secondary" onClick={sendUsername}>CONFIRM USERNAME</Button>
         </InputGroup.Append>
       </InputGroup>
     </Container>

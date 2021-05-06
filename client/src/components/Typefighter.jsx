@@ -19,10 +19,12 @@ function Typefighter(props) {
   }, [props.socket])
 
   return (
-    (!props.host && !props.join) ? (<Container className="d-flex justify-content-center align-items-center" style={{ minHeight: "100vh" }}>
+    (!props.host && !props.join) ? (<Container style={{ minHeight: "100vh" }}>
       <div className="text-center">
-        <Button variant="outline-primary" className="mr-md-2 mb-2 btn-lg" onClick={() => props.setHost(1)}>HOST GAME</Button>
-        <Button variant="outline-primary" className="ml-md-2 mb-2 btn-lg" onClick={() => props.setJoin(1)}>JOIN GAME</Button>
+        <Button variant="outline-primary" className="my-4 btn-lg w-50" onClick={() => props.setHost(1)}>HOST GAME</Button>
+        <div className="gameList">
+          <h5>... GAMES ...</h5>
+        </div>
       </div>
     </Container>) : <Lobby />
   )
