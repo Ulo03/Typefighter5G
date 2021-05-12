@@ -10,6 +10,7 @@ const initialState = {
   username: "",
   socketURL: "http://127.0.0.1:80",
   socket: io(),
+  onlineCount: 0,
   grid: [
     [0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0],
@@ -18,7 +19,9 @@ const initialState = {
     [0, 0, 0, 0, 0]
   ],
   host: 0,
-  join: 0
+  join: 0,
+  gameId: "",
+  openGames: []
 };
 
 function reducer(state = initialState, action) {
@@ -35,12 +38,20 @@ function reducer(state = initialState, action) {
           return action.state;
         });
       })};
+    case "SET_GRID":
+      return { ...state, grid: action.data };
     case "SET_HOST":
       return { ...state, host: action.data };
     case "SET_JOIN":
       return { ...state, join: action.data };
     case "SET_SOCKET_URL":
       return { ...state, socketURL: action.data };
+    case "SET_GAME_ID":
+      return { ...state, gameId: action.data };
+    case "SET_OPEN_GAMES":
+      return { ...state, openGames: action.data };
+    case "SET_ONLINE_COUNT":
+      return { ...state, onlineCount: action.data };
     default:
       return state;
   }
@@ -55,3 +66,4 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root')
 );
+

@@ -42,3 +42,31 @@ export function setSocketURL(url) {
     data: url
   }
 }
+
+export function setGrid(grid) {
+  return {
+    type: "SET_GRID",
+    data: grid
+  }
+}
+
+export function setGameId(id) {
+  return {
+    type: "SET_GAME_ID",
+    data: id
+  }
+}
+
+export function setOpenGames(games) {
+  return {
+    type: "SET_OPEN_GAMES",
+    data: games
+  }
+}
+
+export function setOnlineCount(count) {
+  return {
+    type: "SET_ONLINE_COUNT",
+    data: count
+  }
+}

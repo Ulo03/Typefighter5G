@@ -11,29 +11,31 @@ const io = require("socket.io")(server, {
 });
 
 app.use(express.static("public"));
-var allClients = [];
-var allUsernames = [];
+let allClients = [];
+let allUsernames = [];
+let openGames = [];
 
 io.on("connection", function(socket) { // neue Verbindung eines Clients
   console.log(`Socket <${socket.id}> connected...`);
   allClients.push(socket);
-  let si = allClients.indexOf(socket);
+  socket.emit("gameUpdate", openGames);
+  socket.emit("onlineCount", allClients.length);
+  let si = -1;
   
   socket.on("sendUsername", function(message) {
+    si = allClients.indexOf(socket);
     allUsernames[si] = message;
     console.log(allUsernames[si] + " logged in!");
   });
 
   socket.on("disconnect", function() {
+    si = allClients.indexOf(socket);
     console.log(`Socket <${socket.id}> disconnected...`);
     console.log(allUsernames[si] + " logged out!");
     allClients.splice(si, 1);
     allUsernames.splice(si, 1);
+    socket.emit("onlineCount", allClients.length);
   });
-});
-
-app.get('/', (req, res) => {
-  res.send('<h1>Hello world</h1>');
 });
 
 server.listen(80, () => {
