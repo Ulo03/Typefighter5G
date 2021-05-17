@@ -15,19 +15,29 @@ function Typefighter(props) {
     if (!props.socket) return;
     props.socket.on("connect", () => {
       props.socket.emit("sendUsername", props.username);
+      props.socket.emit("getOnlineCount", "");
     });
-
+    
     props.socket.on("gameUpdate", (gameList) => {
+      if (props.join || props.host) return;
       props.setOpenGames(gameList);
     });
     props.socket.on("onlineCount", (count) => {
-      props.setOnlineCount(count);
+      if (props.join || props.host) return;
+      props.setOnlineCount(count - 1);
     });
 
   }, [props.socket]);
 
+  useEffect(() => {
+    if (!props.socket) return;
+    if (props.host || props.join) return;
+    props.socket.emit("getOnlineCount", "");
+    props.socket.emit("getGameUpdate", "");
+  }, [props.host, props.join]);
+
   function createGame() {
-    props.socket.emit("createRoom", "");
+    props.socket.emit("createGame", "TestRoom"+props.username);
     props.setHost(1);
   }
 
@@ -35,10 +45,10 @@ function Typefighter(props) {
     (!props.host && !props.join) ?  (<Container style={{ minHeight: "100vh" }}>
     <div className="text-center">
       <Button variant="outline-primary" className="my-4 btn-lg w-50" onClick={() => createGame()}>HOST GAME</Button>
-      <span className="mr-4">Online Players: {props.onlineCount}</span>
+      <span className="ml-4 badge badge-success p-2">Online Players: {props.onlineCount}</span>
       <div className="gameList">
         {props.openGames.map((e, i) => {
-          return (<div className="w-50 btn btn-outline-secondary" key={e.id}>{e.name}'s Game</div>);
+          return (<div className="w-50 btn btn-outline-secondary" key={e.id}>{e}'s Game</div>);
         })}
       </div>
     </div>
