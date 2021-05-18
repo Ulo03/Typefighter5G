@@ -37,7 +37,7 @@ function Typefighter(props) {
   }, [props.host, props.join]);
 
   function createGame() {
-    props.socket.emit("createGame", "TestRoom"+props.username);
+    props.socket.emit("createGame", "Room1");
     props.setHost(1);
   }
 
@@ -48,7 +48,7 @@ function Typefighter(props) {
       <span className="ml-4 badge badge-success p-2">Online Players: {props.onlineCount}</span>
       <div className="gameList d-flex flex-column align-items-center">
         {props.openGames.map((e, i) => {
-          return (<div className="w-50 btn btn-outline-secondary my-1" key={e.id}>{e}'s Game</div>);
+          return (<div className="w-50 btn btn-outline-secondary my-1" key={e?.id}>{e.name}'s Game</div>);
         })}
       </div>
     </div>
