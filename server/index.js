@@ -14,7 +14,10 @@ const io = require("socket.io")(server, {
 app.use(express.static("public"));
 let allClients = [];
 let allUsernames = [];
-let openGames = [];
+
+let users = {}
+
+let games = {};
 
 io.on("connection", function(socket) { // neue Verbindung eines Clients
   console.log(`Socket <${socket.id}> connected...`);
@@ -24,17 +27,35 @@ io.on("connection", function(socket) { // neue Verbindung eines Clients
   let si = -1;
   
   socket.on("sendUsername", function(message) {
-    si = allClients.indexOf(socket);
-    allUsernames[si] = message;
-    console.log(allUsernames[si] + " logged in!");
+    //si = allClients.indexOf(socket);
+    //allUsernames[si] = message;
+    let newUser = {
+      socketID = socket.id,
+      name: message,
+      currentRoom: null
+    };
+    users[socket.id] = newUser;
+    //console.log(allUsernames[si] + " logged in!");
   });
 
   socket.on("createGame", function(roomName) {
-    console.log(roomName);
+    let newGame = {
+      name: roomName,
+      started: false,
+      players: []
+    };
+    (users.get(socket.id)).currentRoom = roomName;
+    newGame.players.push(users.get(socket.id));
     socket.join(roomName);
-    openGames.push(roomName);
-    io.emit("gameUpdate", openGames);
+
+    //console.log(io.of("/").adapter.rooms.get("Room1"));
+    //console.log(io.of("/").adapter.rooms);
+    io.emit("gameUpdate", games);
     console.log("room created");
+  });
+
+  socket.on("leaveGame", function(roomName) {
+    socket.leave(roomName);
   });
 
   socket.on("disconnect", function() {
