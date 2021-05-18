@@ -46,9 +46,9 @@ function Typefighter(props) {
     <div className="text-center">
       <Button variant="outline-primary" className="my-4 btn-lg w-50" onClick={() => createGame()}>HOST GAME</Button>
       <span className="ml-4 badge badge-success p-2">Online Players: {props.onlineCount}</span>
-      <div className="gameList">
+      <div className="gameList d-flex flex-column align-items-center">
         {props.openGames.map((e, i) => {
-          return (<div className="w-50 btn btn-outline-secondary" key={e.id}>{e}'s Game</div>);
+          return (<div className="w-50 btn btn-outline-secondary my-1" key={e.id}>{e}'s Game</div>);
         })}
       </div>
     </div>

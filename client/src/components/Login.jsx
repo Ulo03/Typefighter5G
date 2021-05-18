@@ -12,18 +12,31 @@ function Login(props) {
     }
   }
 
+  function checkUsername() {
+    let name = document.getElementById("username").value;
+    let label = document.getElementById("error");
+    if (name.length <= 0) {
+      label.textContent = "Please enter a username!";
+    } else if (name.length > 16) {
+      label.textContent = "Character limit for your username is 16!";
+    } else {
+      sendUsername();
+    }
+  }
+
   return (
-    <Container className="d-flex justify-content-center align-items-center" style={{ minHeight: "100vh" }}>
-      <InputGroup className="mb-3 w-50">
+    <Container className="d-flex justify-content-center align-items-center flex-column" style={{ minHeight: "100vh" }}>
+      <InputGroup className="mb-1 w-50">
         <FormControl id="username"
           placeholder="Username"
           aria-label="Username"
           aria-describedby="basic-addon2"
         />
         <InputGroup.Append>
-          <Button variant="outline-secondary" onClick={sendUsername}>CONFIRM USERNAME</Button>
+          <Button variant="outline-secondary" onClick={checkUsername}>CONFIRM USERNAME</Button>
         </InputGroup.Append>
       </InputGroup>
+      <Form.Label className="text-danger" id="error"></Form.Label>
     </Container>
   )
 }
