@@ -12,30 +12,31 @@ const io = require("socket.io")(server, {
 });
 
 app.use(express.static("public"));
-let allClients = [];
-let allUsernames = [];
 
 let users = {}
-
 let games = {};
 
 io.on("connection", function(socket) { // neue Verbindung eines Clients
   console.log(`Socket <${socket.id}> connected...`);
-  allClients.push(socket);
-  io.emit("gameUpdate", openGames);
-  io.emit("onlineCount", allClients.length);
+  io.emit("gameUpdate", games);
   let si = -1;
   
   socket.on("sendUsername", function(message) {
-    //si = allClients.indexOf(socket);
-    //allUsernames[si] = message;
     let newUser = {
-      socketID = socket.id,
+      socketID: socket.id,
       name: message,
       currentRoom: null
     };
     users[socket.id] = newUser;
-    //console.log(allUsernames[si] + " logged in!");
+    console.log(users[socket.id].name + " logged in!");
+    io.emit("onlineCount", Object.keys(users).length - 1);
+  });
+
+  socket.on("joinGame", function(roomName) {
+    users[socket.id].currentRoom = roomName;
+    games[roomName].players.push(users[socket.id]);
+    socket.join(roomName);
+    console.log(users[socket.id].name + " joined Room -> " + games[roomName].name);
   });
 
   socket.on("createGame", function(roomName) {
@@ -44,27 +45,47 @@ io.on("connection", function(socket) { // neue Verbindung eines Clients
       started: false,
       players: []
     };
-    (users.get(socket.id)).currentRoom = roomName;
-    newGame.players.push(users.get(socket.id));
+    users[socket.id].currentRoom = roomName;
+    newGame.players.push(users[socket.id]);
+    games[roomName] = newGame;
     socket.join(roomName);
 
-    //console.log(io.of("/").adapter.rooms.get("Room1"));
-    //console.log(io.of("/").adapter.rooms);
     io.emit("gameUpdate", games);
-    console.log("room created");
+    console.log("room created: " + roomName);
   });
 
   socket.on("leaveGame", function(roomName) {
     socket.leave(roomName);
+    let playerList = games[users[socket.id].currentRoom].players;
+    let idx = playerList.find((obj) => {
+      return obj.socketID == socket.id;
+    });
+    playerList.splice(idx , 1);
+    users[socket.id].currentRoom = null;
+    if (playerList.length <= 0) {
+      delete games[roomName];
+    }
+    io.emit("gameUpdate", games);
   });
 
   socket.on("disconnect", function() {
-    si = allClients.indexOf(socket);
     console.log(`Socket <${socket.id}> disconnected...`);
-    console.log(allUsernames[si] + " logged out!");
-    allClients.splice(si, 1);
-    allUsernames.splice(si, 1);
-    io.emit("onlineCount", allClients.length);
+    console.log(users[socket.id].name + " logged out!");
+    if (users[socket.id].currentRoom) {
+      let roomName = users[socket.id].currentRoom;
+      let playerList = games[users[socket.id].currentRoom].players;
+      let idx = playerList.find((obj) => {
+        return obj.socketID == socket.id;
+      });
+      playerList.splice(idx , 1);
+      users[socket.id].currentRoom = null;
+      if (playerList.length <= 0) {
+        delete games[roomName];
+      }
+      io.emit("gameUpdate", games);
+    }
+    delete users[socket.id];
+    io.emit("onlineCount", Object.keys(users).length - 1);
   });
 });
 
