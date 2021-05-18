@@ -49,7 +49,7 @@ function Typefighter(props) {
   return (
     (!props.host && !props.join) ?  (<Container style={{ minHeight: "100vh" }}>
     <div className="text-center">
-      <Button style={{ position: "relative" }} variant="outline-primary" className="my-4 btn-lg w-50" onClick={() => createGame()}>HOST GAME<span className="ml-4 badge badge-primary p-2" style={{ position: "absolute", top: "50%", right: "0.5rem", transform: "translate(0, -50%)" }}>Online Players: {props.onlineCount}</span></Button>
+      <Button variant="outline-primary" className="my-4 btn-lg w-50 position-relative" onClick={() => createGame()}>HOST GAME<span className="ml-4 badge badge-primary p-2" style={{ position: "absolute", top: "50%", right: "0.5rem", transform: "translate(0, -50%)" }}>Online Players: {props.onlineCount}</span></Button>
       <div className="gameList d-flex flex-column align-items-center">
         {Object.keys(props.openGames).map((key, i) => {
           let e = props.openGames[key];
