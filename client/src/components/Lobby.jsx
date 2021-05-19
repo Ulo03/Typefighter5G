@@ -32,21 +32,21 @@ function Lobby(props) {
 
   return (
     <Container style={{ minHeight: "100vh" }}>
-      <div class="card position-relative float-right">
-        <div class="card-header">
+      <div className="card float-right mt-5 border-primary ">
+        <div className="card-header bg-primary pr-5 pl-5 text-white">
           Players
         </div>
-        <ul class="list-group list-group-flush">
+        <div className="list-group list-group-flush m-3">
           {Object.keys(props.openGames).map((key, i) => {
             let e = props.openGames[key];
             if (e?.name == props.gameId) {
               return e.players.map((key2, i) => {
                 let d = e.players[i];
-                return (<li> {d?.name} </li>);
+                return (<div > {d?.name} </div>);
               })
             }
           })}
-        </ul>
+        </div>
       </div>
       <h1 style={{
         position: "absolute",
