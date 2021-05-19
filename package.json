@@ -4,8 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "client": "npm start --prefix client",
+    "server": "node index.js",
     "dev": "nodemon index.js",
-    "start": "node index.js"
+    "dev-all": "concurrently \"npm run dev\" \"npm run client\"",
+    "all": "concurrently \"npm run server\" \"npm run client\""
   },
   "keywords": [],
   "author": "",
@@ -16,6 +19,7 @@
     "socket.io": "^4.0.1"
   },
   "devDependencies": {
+    "concurrently": "^6.1.0",
     "nodemon": "^2.0.7"
   }
 }
