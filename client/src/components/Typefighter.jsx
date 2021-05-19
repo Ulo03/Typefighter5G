@@ -50,7 +50,6 @@ function Typefighter(props) {
         console.log(response);
       }
     });
-
   }
 
   return (
