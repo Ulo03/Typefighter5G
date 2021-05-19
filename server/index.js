@@ -1,4 +1,3 @@
-const { RSA_NO_PADDING } = require('constants');
 const express = require('express');
 const app = express();
 const http = require('http');
@@ -94,10 +93,6 @@ io.on("connection", function(socket) { // neue Verbindung eines Clients
         delete users[socket.id];
         io.emit("onlineCount", Object.keys(users).length - 1);
     });
-
-    function sendResponse(socket, response) {
-
-    }
 });
 
 server.listen(80, () => {
