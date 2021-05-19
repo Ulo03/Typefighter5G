@@ -1,4 +1,3 @@
-const { RSA_NO_PADDING } = require('constants');
 const express = require('express');
 const app = express();
 const http = require('http');
@@ -19,8 +18,6 @@ let games = {};
 io.on("connection", function(socket) { // neue Verbindung eines Clients
   console.log(`Socket <${socket.id}> connected...`);
   io.emit("gameUpdate", games);
-  let si = -1;
-  
   socket.on("sendUsername", function(message) {
     let newUser = {
       socketID: socket.id,
@@ -82,9 +79,9 @@ io.on("connection", function(socket) { // neue Verbindung eines Clients
       if (playerList.length <= 0) {
         delete games[roomName];
       }
-      io.emit("gameUpdate", games);
     }
     delete users[socket.id];
+    io.emit("gameUpdate", games);
     io.emit("onlineCount", Object.keys(users).length - 1);
   });
 });
