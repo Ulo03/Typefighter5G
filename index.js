@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const app = express();
 const http = require('http');
 const server = http.createServer(app);
@@ -10,7 +11,10 @@ const io = require("socket.io")(server, {
     }
 });
 
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, 'build')));
+app.get('/*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 let users = {}
 let games = {};
@@ -70,8 +74,8 @@ io.on("connection", function(socket) { // neue Verbindung eines Clients
 
     socket.on("disconnect", function() {
         console.log(`Socket <${socket.id}> disconnected...`);
-        console.log(users[socket.id].name + " logged out!");
-        if (users[socket.id].currentRoom) {
+        console.log(users[socket.id]?.name + " logged out!");
+        if (users[socket.id]?.currentRoom) {
             let roomName = users[socket.id].currentRoom;
             leaveRoom(socket.id, roomName)
         }
