@@ -81,14 +81,15 @@ io.on("connection", function(socket) { // neue Verbindung eines Clients
 
     function leaveRoom(socketID, roomName) {
         let playerList = games[users[socketID].currentRoom].players;
-        let idx = playerList.find((obj) => {
-            return obj.socketID == socketID;
-        });
+        let idx = playerList.map(function(player) {
+            return player.socketID;
+        }).indexOf(socketID);
         playerList.splice(idx, 1);
         users[socketID].currentRoom = null;
         if (playerList.length <= 0) {
             delete games[roomName];
         } else if (games[roomName].hostSocketID == socketID) {
+            console.log("new host");
             games[roomName].hostSocketID = playerList[0].socketID;
             socket.to(playerList[0].socketID).emit("setJoinHost", "host");
         }
