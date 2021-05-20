@@ -26,6 +26,17 @@ function Typefighter(props) {
       props.setOnlineCount(count);
     });
 
+    props.socket.on("setJoinHost", (value) => {
+      if (value == "join") {
+        props.setJoin(true);
+        props.setHost(false);
+      } else if (value == "host") {
+        props.setHost(true);
+        props.setJoin(false);
+        console.log("now host");
+      }
+    });
+
   }, [props.socket]);
 
   // useEffect(() => {

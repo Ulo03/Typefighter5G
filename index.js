@@ -50,8 +50,10 @@ io.on("connection", function(socket) { // neue Verbindung eines Clients
             name: roomName,
             started: false,
             players: [],
-            maxPlayers: 4
+            maxPlayers: 4,
+            hostSocketID: socket.id
         };
+        console.log(newGame.hostSocketID);
         users[socket.id].currentRoom = roomName;
         newGame.players.push(users[socket.id]);
         games[roomName] = newGame;
@@ -63,16 +65,7 @@ io.on("connection", function(socket) { // neue Verbindung eines Clients
 
     socket.on("leaveGame", function(roomName) {
         socket.leave(roomName);
-        let playerList = games[users[socket.id].currentRoom].players;
-        let idx = playerList.find((obj) => {
-            return obj.socketID == socket.id;
-        });
-        playerList.splice(idx, 1);
-        users[socket.id].currentRoom = null;
-        if (playerList.length <= 0) {
-            delete games[roomName];
-        }
-        io.emit("gameUpdate", games);
+        leaveRoom(socket.id, roomName);
     });
 
     socket.on("disconnect", function() {
@@ -80,20 +73,27 @@ io.on("connection", function(socket) { // neue Verbindung eines Clients
         console.log(users[socket.id].name + " logged out!");
         if (users[socket.id].currentRoom) {
             let roomName = users[socket.id].currentRoom;
-            let playerList = games[users[socket.id].currentRoom].players;
-            let idx = playerList.find((obj) => {
-                return obj.socketID == socket.id;
-            });
-            playerList.splice(idx, 1);
-            users[socket.id].currentRoom = null;
-            if (playerList.length <= 0) {
-                delete games[roomName];
-            }
-            io.emit("gameUpdate", games);
+            leaveRoom(socket.id, roomName)
         }
         delete users[socket.id];
         io.emit("onlineCount", Object.keys(users).length - 1);
     });
+
+    function leaveRoom(socketID, roomName) {
+        let playerList = games[users[socketID].currentRoom].players;
+        let idx = playerList.find((obj) => {
+            return obj.socketID == socketID;
+        });
+        playerList.splice(idx, 1);
+        users[socketID].currentRoom = null;
+        if (playerList.length <= 0) {
+            delete games[roomName];
+        } else if (games[roomName].hostSocketID == socketID) {
+            games[roomName].hostSocketID = playerList[0].socketID;
+            socket.to(playerList[0].socketID).emit("setJoinHost", "host");
+        }
+        io.emit("gameUpdate", games);
+    }
 });
 
 server.listen(80, () => {

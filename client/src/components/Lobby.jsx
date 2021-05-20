@@ -34,7 +34,7 @@ function Lobby(props) {
     <Container style={{ minHeight: "100vh" }}>
       <div className="card float-right mt-5 border-primary ">
         <div className="card-header bg-primary pr-5 pl-5 text-white">
-          Players
+          Players in this lobby:
         </div>
         <div className="list-group list-group-flush m-3">
           {Object.keys(props.openGames).map((key, i) => {
@@ -42,7 +42,11 @@ function Lobby(props) {
             if (e?.name == props.gameId) {
               return e.players.map((key2, i) => {
                 let d = e.players[i];
-                return (<div > {d?.name} </div>);
+                if (d.socketID == e.hostSocketID) {
+                  return (<div className="mb-3" >{d?.name} <span className="ml-4 badge badge-secondary p-2" style={{ position: "relative", right: "0.5rem"}}>Host </span> </div>);
+                } else {
+                  return (<div className="mb-3"> {d?.name} </div>);
+                }
               })
             }
           })}
