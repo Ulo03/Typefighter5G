@@ -19,9 +19,9 @@ function Lobby(props) {
           Players in this lobby:
         </div>
         <div className="list-group ml-2 my-1">
-          {props.openGames[props.currentGame].players.map((key, i) => {
-            let d = props.openGames[props.currentGame]?.players[i];
-            if (d.socketID == props.openGames[props.currentGame].hostSocketID) {
+          {props.openGames[props.gameId]?.players.map((key, i) => {
+            let d = props.openGames[props.gameId]?.players[i];
+            if (d.socketID == props.openGames[props.gameId].hostSocketID) {
               return (
                 <div className="my-1">
                   <span className="badge badge-light p-2">{d.name}</span>
@@ -43,7 +43,7 @@ function Lobby(props) {
           })}
         </div>
       </div>
-      {(props.host && props.openGames[props.currentGame]?.players.length >= 2) ? (
+      {(props.host && props.openGames[props.gameId]?.players.length >= 2) ? (
         <Button variant="outline-success" className="w-25 mt-2">
           Start Game
         </Button>
@@ -67,15 +67,14 @@ function mapStateToProps(state) {
     host: state.host,
     join: state.join,
     gameId: state.gameId,
-    openGames: state.openGames,
-    currentGame: state.currentGame,
+    openGames: state.openGames
   };
 }
 
 const mapDispatchToProps = {
   setHost,
   setJoin,
-  setGameId,
+  setGameId
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Lobby);

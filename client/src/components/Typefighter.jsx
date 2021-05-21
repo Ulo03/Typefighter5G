@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { io } from "socket.io-client";
 import { connect } from "react-redux";
-import { setSocket, setHost, setJoin, setOpenGames, setOnlineCount, setGameId, setCurrentGame } from "../actions";
+import { setSocket, setHost, setJoin, setOpenGames, setOnlineCount, setGameId } from "../actions";
 import { Container, Button } from "react-bootstrap";
 import Lobby from "./Lobby";
 
@@ -102,8 +102,7 @@ const mapDispatchToProps = {
   setJoin,
   setOpenGames,
   setOnlineCount,
-  setGameId,
-  setCurrentGame
+  setGameId
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Typefighter);
