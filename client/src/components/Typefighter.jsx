@@ -46,8 +46,9 @@ function Typefighter(props) {
   // }, [props.host, props.join]);
 
   function createGame() {
-    props.socket.emit("createGame", props.username);
-    props.setGameId(props.username);
+    let gameName = `${props.username}'s Game`
+    props.socket.emit("createGame", gameName);
+    props.setGameId(gameName);
     props.setHost(1);
   }
 
