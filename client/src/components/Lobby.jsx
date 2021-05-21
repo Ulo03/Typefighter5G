@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
-import { io } from "socket.io-client";
 import { connect } from "react-redux";
-import { setSocket, setHost, setJoin, setOpenGames, setOnlineCount, setGameId } from "../actions";
+import { setHost, setJoin, setGameId } from "../actions";
 import { Container, Button } from "react-bootstrap";
 
 function Lobby(props) {
