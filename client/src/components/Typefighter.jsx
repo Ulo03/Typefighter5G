@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { io } from "socket.io-client";
 import { connect } from "react-redux";
-import { setSocket, setHost, setJoin, setOpenGames, setOnlineCount, setGameId } from "../actions";
+import { setSocket, setHost, setJoin, setOpenGames, setOnlineCount, setGameId, setCurrentGame } from "../actions";
 import { Container, Button } from "react-bootstrap";
 import Lobby from "./Lobby";
 
@@ -46,9 +46,10 @@ function Typefighter(props) {
   // }, [props.host, props.join]);
 
   function createGame() {
-    let gameName = `${props.username}'s Game`
+    let gameName = `${props.username}'s Game`;
     props.socket.emit("createGame", gameName);
     props.setGameId(gameName);
+    props.setCurrentGame(gameName);
     props.setHost(1);
   }
 
@@ -57,6 +58,7 @@ function Typefighter(props) {
     props.socket.once("response", (response) => {
       if (response === "200") {
         props.setGameId(roomName);
+        props.setCurrentGame(roomName);
         props.setJoin(1);
       } else {
         console.log(response);
@@ -100,7 +102,8 @@ const mapDispatchToProps = {
   setJoin,
   setOpenGames,
   setOnlineCount,
-  setGameId
+  setGameId,
+  setCurrentGame
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Typefighter);

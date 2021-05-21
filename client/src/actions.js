@@ -70,3 +70,10 @@ export function setOnlineCount(count) {
     data: count
   }
 }
+
+export function setCurrentGame(name) {
+  return {
+    type: "SET_CURRENT_GAME",
+    data: name
+  }
+}
