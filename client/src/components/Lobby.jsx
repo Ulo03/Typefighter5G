@@ -31,6 +31,7 @@ function Lobby(props) {
 
   return (
     <Container style={{ minHeight: "100vh" }}>
+      <Button onClick={leaveGame}>Leave Game</Button>
       <div className="card float-right mt-5 border-primary ">
         <div className="card-header bg-primary pr-5 pl-5 text-white">
           Players in this lobby:
@@ -56,7 +57,7 @@ function Lobby(props) {
         top: "50%",
         left: "50%",
         transform: "translate(-50%, -50%)" }} 
-      onClick={leaveGame}>Lobby</h1>  
+      >Lobby</h1>  
     </Container>
   )
 }
