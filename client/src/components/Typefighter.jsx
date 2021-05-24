@@ -72,7 +72,7 @@ function Typefighter(props) {
         {Object.keys(props.openGames).map((key, i) => {
           let e = props.openGames[key];
           if (e.players.length < e.maxPlayers) {
-            return (<div className="w-50 btn btn-outline-secondary my-1 position-relative" key={e.socketID} onClick={() => joinGame(e.name)}>{e.name}'s Game<span className="ml-4 badge badge-secondary p-2" style={{ position: "absolute", top: "50%", right: "0.5rem", transform: "translate(0, -50%)" }}>Players: {e.players.length}</span> </div>);
+            return (<div className="w-50 btn btn-outline-secondary my-1 position-relative" key={e.socketID} onClick={() => joinGame(e.name)}>{e.name}<span className="ml-4 badge badge-secondary p-2" style={{ position: "absolute", top: "50%", right: "0.5rem", transform: "translate(0, -50%)" }}>Players: {e.players.length}</span> </div>);
           }
         })}
 
