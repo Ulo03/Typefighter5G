@@ -49,7 +49,6 @@ function Typefighter(props) {
     let gameName = `${props.username}'s Game`;
     props.socket.emit("createGame", gameName);
     props.setGameId(gameName);
-    props.setCurrentGame(gameName);
     props.setHost(1);
   }
 
@@ -58,7 +57,6 @@ function Typefighter(props) {
     props.socket.once("response", (response) => {
       if (response === "200") {
         props.setGameId(roomName);
-        props.setCurrentGame(roomName);
         props.setJoin(1);
       } else {
         console.log(response);
