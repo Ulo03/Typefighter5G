@@ -13,15 +13,6 @@ export function setSocket(socket) {
   }
 }
 
-export function setCell(row, col, state) {
-  return {
-    type: "SET_CELL",
-    row: row,
-    col: col,
-    state: state
-  }
-}
-
 export function setHost(val) {
   return {
     type: "SET_HOST",
@@ -40,13 +31,6 @@ export function setSocketURL(url) {
   return {
     type: "SET_SOCKET_URL",
     data: url
-  }
-}
-
-export function setGrid(grid) {
-  return {
-    type: "SET_GRID",
-    data: grid
   }
 }
 

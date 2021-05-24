@@ -55,7 +55,8 @@ io.on("connection", function(socket) { // neue Verbindung eines Clients
             started: false,
             players: [],
             maxPlayers: 4,
-            hostSocketID: socket.id
+            hostSocketID: socket.id,
+            grid: []
         };
         console.log(newGame.hostSocketID);
         users[socket.id].currentRoom = roomName;

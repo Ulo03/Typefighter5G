@@ -11,13 +11,6 @@ const initialState = {
   socketURL: "http://127.0.0.1:80",
   socket: io(),
   onlineCount: 0,
-  grid: [
-    [0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0]
-  ],
   host: 0,
   join: 0,
   gameId: "",
@@ -31,16 +24,6 @@ function reducer(state = initialState, action) {
       return { ...state, username: action.data };
     case "SET_SOCKET":
       return { ...state, socket: action.data };
-    case "SET_CELL":
-      return {...state, grid: state.grid.map((e, i) => {
-        if (i !== action.row) return e;
-        return e.map((e2, i2) => {
-          if (i2 !== action.col) return e2;
-          return action.state;
-        });
-      })};
-    case "SET_GRID":
-      return { ...state, grid: action.data };
     case "SET_HOST":
       return { ...state, host: action.data };
     case "SET_JOIN":
