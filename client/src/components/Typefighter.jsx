@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { io } from "socket.io-client";
 import { connect } from "react-redux";
 import { setSocket, setHost, setJoin, setOpenGames, setOnlineCount, setGameId } from "../actions";
-import { Container, Button } from "react-bootstrap";
+import { Container, Button, InputGroup, FormControl } from "react-bootstrap";
 import Lobby from "./Lobby";
 
 function Typefighter(props) {
@@ -46,10 +46,18 @@ function Typefighter(props) {
   // }, [props.host, props.join]);
 
   function createGame() {
-    let gameName = `${props.username}'s Game`;
+    let input = document.getElementById("gameName");
+    if (!input.value) return;
+    let gameName = input.value;
     props.socket.emit("createGame", gameName);
-    props.setGameId(gameName);
-    props.setHost(1);
+    props.socket.once("response", (response) => {
+      if (response === "200") {
+        props.setGameId(gameName);
+        props.setHost(1);
+      } else {
+        alert(response);
+      }
+    });
   }
 
   function joinGame(roomName) {
@@ -59,7 +67,7 @@ function Typefighter(props) {
         props.setGameId(roomName);
         props.setJoin(1);
       } else {
-        console.log(response);
+        alert(response);
       }
     });
   }
@@ -67,7 +75,19 @@ function Typefighter(props) {
   return (
     (!props.host && !props.join) ?  (<Container style={{ minHeight: "100vh" }}>
     <div className="text-center">
-      <Button variant="outline-primary" className="my-4 btn-lg w-50 position-relative" onClick={() => createGame()}>HOST GAME<span className="ml-4 badge badge-primary p-2" style={{ position: "absolute", top: "50%", right: "0.5rem", transform: "translate(0, -50%)" }}>Online Players: {props.onlineCount}</span></Button>
+    <div className="d-flex flex-column align-items-center">
+    <InputGroup className="w-50 d-flex align-items-center">
+      <FormControl id="gameName"
+        placeholder="Name your Lobby..."
+        aria-label="Name your Lobby..."
+        aria-describedby="basic-addon2"
+        autoFocus={true}
+      />
+      <InputGroup.Append>
+        <Button variant="outline-primary" className="my-4 position-relative" onClick={() => createGame()}>HOST GAME<span className="ml-4 badge badge-primary p-1">Online Players: {props.onlineCount}</span></Button>
+      </InputGroup.Append>
+    </InputGroup>
+    </div>
       <div className="gameList d-flex flex-column align-items-center">
         {Object.keys(props.openGames).map((key, i) => {
           let e = props.openGames[key];
