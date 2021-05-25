@@ -8,7 +8,7 @@ import { io } from "socket.io-client";
 
 const initialState = {
   username: "",
-  socketURL: "http://127.0.0.1:80",
+  socketURL: "http://192.168.43.206:80",
   socket: io(),
   onlineCount: 0,
   host: 0,

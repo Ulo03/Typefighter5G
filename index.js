@@ -75,8 +75,8 @@ io.on("connection", function(socket) { // neue Verbindung eines Clients
 
     socket.on("disconnect", function() {
         console.log(`Socket <${socket.id}> disconnected...`);
-        console.log(users[socket.id]?.name + " logged out!");
-        if (users[socket.id]?.currentRoom) {
+        console.log(users[socket.id].name + " logged out!");
+        if (users[socket.id].currentRoom) {
             let roomName = users[socket.id].currentRoom;
             leaveRoom(socket.id, roomName)
         }
