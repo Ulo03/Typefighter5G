@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { setSocket, setHost, setJoin, setOpenGames, setOnlineCount, setGameId } from "../actions";
 import { Container, Button, InputGroup, FormControl } from "react-bootstrap";
 import Lobby from "./Lobby";
+import Game from "./Game";
 
 function Typefighter(props) {
 
@@ -98,7 +99,7 @@ function Typefighter(props) {
 
       </div>
     </div>
-  </Container>) : <Lobby />
+  </Container>) : (!props.openGames[props.gameId]?.started) ? <Lobby /> : <Game />
   )
 }
 
@@ -111,6 +112,7 @@ function mapStateToProps(state) {
     join: state.join,
     openGames: state.openGames,
     onlineCount: state.onlineCount,
+    gameId: state.gameId
   }
 }
 

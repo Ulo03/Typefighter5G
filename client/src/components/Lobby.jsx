@@ -11,6 +11,11 @@ function Lobby(props) {
     props.setGameId('');
   }
 
+  function startGame() {
+    props.socket.emit("startGame", props.gameId);
+    
+  }
+
   return (
     <Container className="d-flex flex-column align-items-center mt-3">
       <h1>{props.gameId}</h1>
@@ -44,7 +49,7 @@ function Lobby(props) {
         </div>
       </div>
       {(props.host && props.openGames[props.gameId]?.players.length >= 2) ? (
-        <Button variant="outline-success" className="w-25 mt-2">
+        <Button onClick={startGame} variant="outline-success" className="w-25 mt-2">
           Start Game
         </Button>
       ) : (

@@ -4,6 +4,8 @@ const app = express();
 const http = require('http');
 const server = http.createServer(app);
 
+const randomWords = require('./words');
+
 const io = require("socket.io")(server, {
     cors: {
         origin: "*",
@@ -18,6 +20,9 @@ app.get('/*', (req, res) => {
 
 let users = {}
 let games = {};
+
+let gridwidth = 5;
+let gridheight = 5;
 
 io.on("connection", function(socket) { // neue Verbindung eines Clients
     console.log(`Socket <${socket.id}> connected...`);
@@ -49,27 +54,56 @@ io.on("connection", function(socket) { // neue Verbindung eines Clients
     });
 
     socket.on("createGame", function(roomName) {
-        if (!(Object.keys(games).includes(roomName))) {
-            let newGame = {
-                name: roomName,
-                started: false,
-                players: [],
-                maxPlayers: 4,
-                hostSocketID: socket.id,
-                grid: []
-            };
-            console.log(newGame.hostSocketID);
-            users[socket.id].currentRoom = roomName;
-            newGame.players.push(users[socket.id]);
-            games[roomName] = newGame;
-            socket.join(roomName);
-            
-            socket.emit("response", "200");
-            io.emit("gameUpdate", games);
-            console.log("room created: " + roomName);
+        if (roomName) {
+            if (!(Object.keys(games).includes(roomName))) {
+                let newGame = {
+                    name: roomName,
+                    started: false,
+                    players: [],
+                    maxPlayers: 4,
+                    hostSocketID: socket.id,
+                    grid: [
+                        [{}, {}, {}, {}, {}],
+                        [{}, {}, {}, {}, {}],
+                        [{}, {}, {}, {}, {}],
+                        [{}, {}, {}, {}, {}],
+                        [{}, {}, {}, {}, {}]
+                      ]
+                };
+                console.log(newGame.hostSocketID);
+                users[socket.id].currentRoom = roomName;
+                newGame.players.push(users[socket.id]);
+                games[roomName] = newGame;
+                socket.join(roomName);
+                
+                socket.emit("response", "200");
+                io.emit("gameUpdate", games);
+                console.log("room created: " + roomName);
+            } else {
+                socket.emit("response", "Es existiert bereits ein Spiel mit dem selben Namen");
+            }
         } else {
-            socket.emit("response", "Es existiert bereits ein Spiel mit dem selben Namen");
+            socket.emit("response", "Der Spielname darf nicht leer sein");
         }
+    });
+
+    socket.on("startGame", function(roomName) {
+        startingRoom = games[roomName];
+        
+        let cell = {};
+        for (let i = 0; i < gridheight; i++) {
+            for (let j = 0; j < gridwidth; j++) {
+                cell = {
+                    word: randomWords({exactly: 1,maxLength: 12, minLength: 5})[0],
+                    currentPlayer: null
+                }        
+                startingRoom.grid[i][j] = cell;
+                console.log(startingRoom.grid[i][j]);
+            }
+        }
+
+        startingRoom.started = true;
+        io.emit("gameUpdate", games);
     });
 
     socket.on("leaveGame", function(roomName) {
