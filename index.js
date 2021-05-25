@@ -22,7 +22,6 @@ let games = {};
 io.on("connection", function(socket) { // neue Verbindung eines Clients
     console.log(`Socket <${socket.id}> connected...`);
     io.emit("gameUpdate", games);
-    let si = -1;
 
     socket.on("sendUsername", function(message) {
         let newUser = {
@@ -50,22 +49,27 @@ io.on("connection", function(socket) { // neue Verbindung eines Clients
     });
 
     socket.on("createGame", function(roomName) {
-        let newGame = {
-            name: roomName,
-            started: false,
-            players: [],
-            maxPlayers: 4,
-            hostSocketID: socket.id,
-            grid: []
-        };
-        console.log(newGame.hostSocketID);
-        users[socket.id].currentRoom = roomName;
-        newGame.players.push(users[socket.id]);
-        games[roomName] = newGame;
-        socket.join(roomName);
-
-        io.emit("gameUpdate", games);
-        console.log("room created: " + roomName);
+        if (!(Object.keys(games).includes(roomName))) {
+            let newGame = {
+                name: roomName,
+                started: false,
+                players: [],
+                maxPlayers: 4,
+                hostSocketID: socket.id,
+                grid: []
+            };
+            console.log(newGame.hostSocketID);
+            users[socket.id].currentRoom = roomName;
+            newGame.players.push(users[socket.id]);
+            games[roomName] = newGame;
+            socket.join(roomName);
+            
+            socket.emit("response", "200");
+            io.emit("gameUpdate", games);
+            console.log("room created: " + roomName);
+        } else {
+            socket.emit("response", "Es existiert bereits ein Spiel mit dem selben Namen");
+        }
     });
 
     socket.on("leaveGame", function(roomName) {
