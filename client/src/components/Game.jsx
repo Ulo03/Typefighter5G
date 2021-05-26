@@ -3,49 +3,33 @@ import { connect } from 'react-redux'
 import { Container, Row, Col } from 'react-bootstrap';
 import './styles/Game.css';
 
-function Game() {
+function Game(props) {
   return (
     <Container style={{minHeight: "100vh", minWidth: "100vw"}} className="m-0 d-flex align-items-center justify-content-between">
       <div className="w-85 mx-5">
-        <Row>
-          <Col>0-0</Col>
-          <Col>0-1</Col>
-          <Col>0-2</Col>
-          <Col>0-3</Col>
-          <Col>0-4</Col>
-        </Row>
-        <Row>
-          <Col>1-0</Col>
-          <Col>1-1</Col>
-          <Col>1-2</Col>
-          <Col>1-3</Col>
-          <Col>1-4</Col>
-        </Row>
-        <Row>
-          <Col>2-0</Col>
-          <Col>2-1</Col>
-          <Col>2-2</Col>
-          <Col>2-3</Col>
-          <Col>2-4</Col>
-        </Row>
-        <Row>
-          <Col>3-0</Col>
-          <Col>3-1</Col>
-          <Col>3-2</Col>
-          <Col>3-3</Col>
-          <Col>3-4</Col>
-        </Row>
-        <Row>
-          <Col>4-0</Col>
-          <Col>4-1</Col>
-          <Col>4-2</Col>
-          <Col>4-3</Col>
-          <Col>4-4</Col>
-        </Row>
+        {
+          props.openGames[props.gameId].grid.map((e, i) => {
+            return (<Row>
+              {
+                e.map((e2, i2) => {
+                  return (<Col>{e2.word}</Col>);
+                })
+              }
+            </Row>);
+          })
+        }
       </div>
       <div className="chat mx-5">
-        <div className="display">
-          DISPLAY
+        <div className="scores">
+          <div className="mb-2">SCORES</div>
+          <div>
+            {props.openGames[props.gameId].players.map((e, i) => {
+              return (<div className={`text-left my-1 p-3 badge w-100 ${e.color}`}>
+              <span>{e.name}</span>
+              <span className={"float-right"}>X / 5</span>
+            </div>);
+            })}
+          </div>
         </div>
         <div className="control">
           CONTROL
@@ -57,7 +41,8 @@ function Game() {
 
 function mapStateToProps(state) {
   return {
-    
+    openGames: state.openGames,
+    gameId: state.gameId
   };
 }
 

@@ -108,8 +108,9 @@ io.on("connection", function(socket) { // neue Verbindung eines Clients
         
         //set colors
         let i = 0;
-        for (let p in startingRoom.players) {
+        for (let p of startingRoom.players) {
             p.color = colors[i];
+            i++;
         }
         startingRoom.started = true;
         io.emit("gameUpdate", games);
