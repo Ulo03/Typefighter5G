@@ -21,6 +21,8 @@ app.get('/*', (req, res) => {
 let users = {}
 let games = {};
 
+let colors = ["clr1", "clr2", "clr3", "clr4"];
+
 let gridwidth = 5;
 let gridheight = 5;
 
@@ -90,7 +92,8 @@ io.on("connection", function(socket) { // neue Verbindung eines Clients
 
     socket.on("startGame", function(roomName) {
         startingRoom = games[roomName];
-        
+
+        //get cells
         let cell = {};
         for (let i = 0; i < gridheight; i++) {
             for (let j = 0; j < gridwidth; j++) {
@@ -102,7 +105,12 @@ io.on("connection", function(socket) { // neue Verbindung eines Clients
                 
             }
         }
-        console.log(startingRoom.grid);
+        
+        //set colors
+        let i = 0;
+        for (let p in startingRoom.players) {
+            p.color = colors[i];
+        }
         startingRoom.started = true;
         io.emit("gameUpdate", games);
     });
