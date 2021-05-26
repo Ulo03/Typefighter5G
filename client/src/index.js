@@ -14,8 +14,7 @@ const initialState = {
   host: 0,
   join: 0,
   gameId: "",
-  openGames: {},
-  currentGame: {}
+  openGames: {}
 };
 
 function reducer(state = initialState, action) {
