@@ -32,7 +32,8 @@ io.on("connection", function(socket) { // neue Verbindung eines Clients
         let newUser = {
             socketID: socket.id,
             name: message,
-            currentRoom: null
+            currentRoom: null, 
+            color: ""
         };
         users[socket.id] = newUser;
         console.log(users[socket.id].name + " logged in!");
@@ -94,17 +95,36 @@ io.on("connection", function(socket) { // neue Verbindung eines Clients
         for (let i = 0; i < gridheight; i++) {
             for (let j = 0; j < gridwidth; j++) {
                 cell = {
-                    word: randomWords({exactly: 1,maxLength: 12, minLength: 5})[0],
+                    word: getRandomWord(),
                     currentPlayer: null
-                }        
+                }
                 startingRoom.grid[i][j] = cell;
-                console.log(startingRoom.grid[i][j]);
+                
             }
         }
-
+        console.log(startingRoom.grid);
         startingRoom.started = true;
         io.emit("gameUpdate", games);
     });
+
+    //gets random word that is not in startingRoom.grid
+    function getRandomWord() {
+        let wordInGrid;
+        let word; 
+
+        do {
+            word = randomWords({exactly: 1,maxLength: 12, minLength: 5})[0];
+            wordInGrid = false;
+            for (let i = 0; i < gridheight; i++) {
+                for (let j = 0; j < gridwidth; j++) {
+                    if (startingRoom.grid[i][j].word == word) {
+                        wordInGrid = true; 
+                    }
+                }
+            }
+        } while (wordInGrid == true)
+        return word;
+    }
 
     socket.on("leaveGame", function(roomName) {
         socket.leave(roomName);

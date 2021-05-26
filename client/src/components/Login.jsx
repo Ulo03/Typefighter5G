@@ -6,6 +6,7 @@ import { setUsername } from "../actions";
 function Login(props) {
 
   useEffect(() => {
+    console.log("login");
     const enterListener = event => {
       if (event.code === "Enter" || event.code === "NumpadEnter") {
         console.log("Enter key was pressed. Run your function.");

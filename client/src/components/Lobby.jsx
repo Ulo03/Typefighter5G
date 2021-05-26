@@ -4,6 +4,7 @@ import { setHost, setJoin, setGameId } from '../actions';
 import { Container, Button } from 'react-bootstrap';
 
 function Lobby(props) {
+
   function leaveGame() {
     props.socket.emit('leaveGame', props.gameId);
     props.setJoin(0);
@@ -49,7 +50,7 @@ function Lobby(props) {
         </div>
       </div>
       {(props.host && props.openGames[props.gameId]?.players.length >= 2) ? (
-        <Button onClick={startGame} variant="outline-success" className="w-25 mt-2">
+        <Button onClick={startGame} id="startButton" variant="outline-success" className="w-25 mt-2">
           Start Game
         </Button>
       ) : (
