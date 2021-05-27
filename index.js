@@ -117,7 +117,7 @@ io.on("connection", function(socket) { // neue Verbindung eines Clients
             let currentSocket = io.sockets.sockets.get(p.socketID);
             currentSocket.on(roomName + ":words", function(word) {
                 validateWord(startingRoom, word, p.socketID);     
-                if (hasGameEnded()) {
+                if (hasGameEnded(roomName)) {
                     //TODO: do something
                 }
                 io.to(roomName).emit("objects", games);
