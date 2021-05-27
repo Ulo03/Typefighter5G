@@ -8,10 +8,7 @@ function Game(props) {
 
   useEffect(() => {
     props.socket.on("objects", (newGames) => {
-      //console.log("newGame: " + newGames[props.gameId].grid[4][4].word)
-      //console.log("color: " + newGames[props.gameId].grid[4][4].player.color)
       props.setOpenGames(newGames);
-      //console.log("client got " + props.openGames[props.gameId].grid[4][4].word);
     });
   });
 
@@ -46,7 +43,7 @@ function Game(props) {
             {props.openGames[props.gameId].players.map((e, i) => {
               return (<div className={`text-left my-1 p-3 badge w-100 ${e.color}`}>
               <span>{e.name}</span>
-              <span className={"float-right"}>X / 5</span>
+              <span className={"float-right"}>{e.score} / 5</span>
             </div>);
             })}
           </div>

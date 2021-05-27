@@ -5,6 +5,8 @@ const http = require('http');
 const server = http.createServer(app);
 
 const randomWords = require('./words');
+const { defaultMaxListeners } = require('events');
+const { clear } = require('console');
 
 const io = require("socket.io")(server, {
     cors: {
@@ -35,7 +37,8 @@ io.on("connection", function(socket) { // neue Verbindung eines Clients
             socketID: socket.id,
             name: message,
             currentRoom: null, 
-            color: ""
+            color: "",
+            score: 0
         };
         users[socket.id] = newUser;
         console.log(users[socket.id].name + " logged in!");
@@ -112,28 +115,166 @@ io.on("connection", function(socket) { // neue Verbindung eines Clients
             p.color = colors[i];
             i++;
             let currentSocket = io.sockets.sockets.get(p.socketID);
-            currentSocket.on(roomName + ":words", async function(word) {
-                await validateWord(startingRoom, word, p.socketID);
-                console.log("asdf=" + games[roomName].grid[4][4].word);
-                
+            currentSocket.on(roomName + ":words", function(word) {
+                validateWord(startingRoom, word, p.socketID);     
+                if (hasGameEnded()) {
+                    //TODO: do something
+                }
                 io.to(roomName).emit("objects", games);
-                
-                console.log("emited game =" + roomName + ":object" );
             });
         }
         startingRoom.started = true;
         io.emit("gameUpdate", games);
     });
 
-    async function validateWord(room, inputWord, playerSocketID) {
-        for (let i = 0; i < room.grid.length; i++) {
-            for (let j = 0; j < room.grid[0].length; j++) {
+    function clearScores(roomName) {
+        for (let player of games[roomName].players) {
+            player.score = 0;
+        }
+    }
+
+    //checks if a player has won and sets scores of the players
+    function hasGameEnded(roomName) {
+        clearScores(roomName);
+        let hasEnded = false;
+        //check five in a row horizontal
+        let currentPlayer;
+        let currentScore = 0;
+        for (let i = 0; i < gridheight; i++) {
+            currentScore = 0;
+            currentPlayer = null;
+            for (let j = 0; j < gridwidth; j++) {
+                if (games[roomName].grid[i][j].player) {
+                    if (currentPlayer == games[roomName].grid[i][j].player) {
+                        currentScore += 1;
+                        if (currentScore > currentPlayer.score) {
+                            currentPlayer.score = currentScore;
+                            if (currentScore == gridwidth) {
+                                hasEnded = true;
+                            }
+                        }
+                    } else {
+                        currentPlayer = games[roomName].grid[i][j].player;
+                        currentScore = 1;
+                        if (currentScore > currentPlayer.score) {
+                            currentPlayer.score = currentScore;
+                        }
+                    }
+                } else {
+                    if (currentPlayer) {
+                        currentPlayer = null;
+                        currentScore = 0;
+                    } 
+                }
+            }
+        }
+        //check five in a row vertical 
+        if (!hasEnded) {
+            for (let i = 0; i < gridheight; i++) {
+                currentScore = 0;
+                currentPlayer = null;
+                for (let j = 0; j < gridwidth; j++) {
+                    if (games[roomName].grid[j][i].player) {
+                        if (currentPlayer == games[roomName].grid[j][i].player) {
+                            currentScore += 1;
+                            if (currentScore > currentPlayer.score) {
+                                currentPlayer.score = currentScore;
+                                if (currentScore == gridwidth) {
+                                    hasEnded = true;
+                                }
+                            }
+                        } else {
+                            currentPlayer = games[roomName].grid[j][i].player;
+                            currentScore = 1;
+                            if (currentScore > currentPlayer.score) {
+                                currentPlayer.score = currentScore;
+                            }
+                        }
+                    } else {
+                        if (currentPlayer) {
+                            currentPlayer = null;
+                            currentScore = 0;
+                        } 
+                    }
+                }
+            }
+        }
+
+        //check five in a row diagonal - left to right
+
+        if (!hasEnded) {
+            currentPlayer = null;
+            currentScore = 0;
+            for (let i = 0; i < gridwidth; i++) {
+                if (games[roomName].grid[i][i].player) {
+                    if (currentPlayer == games[roomName].grid[i][i].player) {
+                        currentScore += 1;
+                        if (currentScore > currentPlayer.score) {
+                            currentPlayer.score = currentScore;
+                            if (currentScore == gridwidth) {
+                                hasEnded = true;
+                            }
+                        }
+                    } else {
+                        currentPlayer = games[roomName].grid[i][i].player;
+                        currentScore = 1;
+                        if (currentScore > currentPlayer.score) {
+                            currentPlayer.score = currentScore;
+                        }
+                    }
+                } else {
+                    if (currentPlayer) {
+                        currentPlayer = null;
+                        currentScore = 0;
+                    } 
+                }
+            }
+        }
+
+        
+
+        //check five in a row diagonal - right to left
+        if (!hasEnded) {
+            currentPlayer = null;
+            currentScore = 0;
+            for (let i = gridwidth - 1; i >= 0; i--) {
+                if (games[roomName].grid[i][(gridwidth - 1) - i].player) {
+                    if (currentPlayer == games[roomName].grid[i][(gridwidth - 1) - i].player) {
+                        currentScore += 1;
+                        if (currentScore > currentPlayer.score) {
+                            currentPlayer.score = currentScore;
+                            if (currentScore == gridwidth) {
+                                hasEnded = true;
+                            }
+                        }
+                    } else {
+                        currentPlayer = games[roomName].grid[i][(gridwidth - 1) - i].player;
+                        currentScore = 1;
+                        if (currentScore > currentPlayer.score) {
+                            currentPlayer.score = currentScore;
+                        }
+                    }
+                } else {
+                    if (currentPlayer) {
+                        currentPlayer = null;
+                        currentScore = 0;
+                    } 
+                }
+            }
+        }
+        
+        return hasEnded;
+    }
+
+    function validateWord(room, inputWord, playerSocketID) {
+        let wordFound = false;
+        for (let i = 0; i < room.grid.length && wordFound == false; i++) {
+            for (let j = 0; j < room.grid[0].length && wordFound == false; j++) {
                 if (room.grid[i][j].word == inputWord) {
-                    console.log("word: " + room.grid[i][j].word);
                     room.grid[i][j].player = users[playerSocketID];
                     room.grid[i][j].player.name;
                     room.grid[i][j].word = getRandomWord();
-                    console.log("newWord: " + room.grid[i][j].word);
+                    wordFound = true;
                 }
             }
         }
@@ -172,6 +313,7 @@ io.on("connection", function(socket) { // neue Verbindung eines Clients
         }
         delete users[socket.id];
         io.emit("onlineCount", Object.keys(users).length - 1);
+        //TODO: falls er in einem spiel war den Spieler aus zelle löschen
     });
 
     function leaveRoom(socketID, roomName) {
