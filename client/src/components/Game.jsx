@@ -29,7 +29,7 @@ function Game(props) {
             return (<Row>
               {
                 e.map((e2, i2) => {
-                  return (<Col className={`${e2.player?.color}`}>{e2.word}</Col>);
+                  return (<Col className={`gamecol ${e2.player?.color}`}>{e2.word}</Col>);
                 })
               }
             </Row>);

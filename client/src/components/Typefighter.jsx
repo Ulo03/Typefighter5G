@@ -99,7 +99,7 @@ function Typefighter(props) {
 
       </div>
     </div>
-  </Container>) : (!props.openGames[props.gameId]?.started) ? <Lobby /> : <Game />
+  </Container>) : (props.openGames[props.gameId]?.started) ? <Game /> : <Lobby /> 
   )
 }
 

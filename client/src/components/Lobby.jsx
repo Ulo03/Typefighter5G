@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { setHost, setJoin, setGameId } from '../actions';
 import { Container, Button } from 'react-bootstrap';
+import Results from "./Results";
 
 function Lobby(props) {
 
@@ -30,7 +31,7 @@ function Lobby(props) {
             if (d.socketID == props.openGames[props.gameId].hostSocketID) {
               return (
                 <div className="my-1">
-                  <span className="badge badge-light p-2">{d.name}</span>
+                  <span className={`badge badge-light p-2 ${d.color}`}>{d.name}</span>
                   <span
                     className="badge badge-secondary p-2 float-right"
                     style={{ position: 'relative', right: '0.5rem' }}
@@ -42,7 +43,7 @@ function Lobby(props) {
             } else {
               return (
                 <div className="my-1">
-                  <span className="badge badge-light p-2">{d.name}</span>
+                  <span className={`badge badge-light p-2 ${d.color}`}>{d.name}</span>
                 </div>
               );
             }
@@ -63,6 +64,7 @@ function Lobby(props) {
       >
         Leave Game
       </Button>
+      {(props.openGames[props.gameId]?.ended) ? <Results /> : ""}
     </Container>
   );
 }

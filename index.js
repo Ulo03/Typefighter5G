@@ -65,6 +65,7 @@ io.on("connection", function(socket) { // neue Verbindung eines Clients
                 let newGame = {
                     name: roomName,
                     started: false,
+                    ended: false,
                     players: [],
                     maxPlayers: 4,
                     hostSocketID: socket.id,
@@ -74,7 +75,7 @@ io.on("connection", function(socket) { // neue Verbindung eines Clients
                         [{}, {}, {}, {}, {}],
                         [{}, {}, {}, {}, {}],
                         [{}, {}, {}, {}, {}]
-                      ]
+                    ]
                 };
                 console.log(newGame.hostSocketID);
                 users[socket.id].currentRoom = roomName;
@@ -118,11 +119,14 @@ io.on("connection", function(socket) { // neue Verbindung eines Clients
             currentSocket.on(roomName + ":words", function(word) {
                 validateWord(startingRoom, word, p.socketID);     
                 if (hasGameEnded(roomName)) {
-                    //TODO: do something
+                    startingRoom.ended = true;
+                    startingRoom.started = false;
+                    io.to(roomName).emit("gameUpdate", games);
                 }
                 io.to(roomName).emit("objects", games);
             });
         }
+        startingRoom.ended = false;
         startingRoom.started = true;
         io.emit("gameUpdate", games);
     });
@@ -301,6 +305,7 @@ io.on("connection", function(socket) { // neue Verbindung eines Clients
 
     socket.on("leaveGame", function(roomName) {
         socket.leave(roomName);
+        users[socket.id].color = "";
         leaveRoom(socket.id, roomName);
     });
 
