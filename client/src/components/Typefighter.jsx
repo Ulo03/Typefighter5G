@@ -10,18 +10,6 @@ function Typefighter(props) {
 
   useEffect(() => {
     props.setSocket(io(props.socketURL));
-
-    const createListener = event => {
-      if (event.code === "Enter" || event.code === "NumpadEnter") {
-        console.log("Enter key was pressed. Run your function.");
-        event.preventDefault();
-        document.getElementById("createButton").click();
-      }
-    };
-    document.addEventListener("keydown", createListener);
-    return () => {
-      document.removeEventListener("keydown", createListener);
-    };
   }, [props.socketURL]);
 
   useEffect(() => {
@@ -97,7 +85,7 @@ function Typefighter(props) {
         autoFocus={true}
       />
       <InputGroup.Append>
-        <Button variant="outline-primary" id="createButton" className="my-4 position-relative" onClick={() => createGame()}>HOST GAME<span className="ml-4 badge badge-primary p-1">Online Players: {props.onlineCount}</span></Button>
+        <Button id="createGameBtn" variant="outline-primary" className="my-4 position-relative" onClick={() => createGame()}>HOST GAME<span className="ml-4 badge badge-primary p-1">Online Players: {props.onlineCount}</span></Button>
       </InputGroup.Append>
     </InputGroup>
     </div>

@@ -42,3 +42,11 @@
   background-color: rgba(145, 145, 233, 1);
   color: white;
 }
+
+input {
+  padding: 0.25rem 0.75rem;
+  background-color: rgba(255,255,255, 0);
+  border: 2px solid rgba(0,0,0, 0.15);
+  border-radius: 0.25rem;
+  outline: none;
+}

@@ -1,9 +1,29 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Container, Row, Col } from 'react-bootstrap';
+import { setOpenGames } from "../actions";
 import './styles/Game.css';
 
 function Game(props) {
+
+  useEffect(() => {
+    props.socket.on("objects", (newGames) => {
+      //console.log("newGame: " + newGames[props.gameId].grid[4][4].word)
+      //console.log("color: " + newGames[props.gameId].grid[4][4].player.color)
+      props.setOpenGames(newGames);
+      //console.log("client got " + props.openGames[props.gameId].grid[4][4].word);
+    });
+  });
+
+  function inputKeyUp(event) {
+    if (event.key === 'Enter') {
+      props.socket.emit(props.gameId + ":words", document.getElementById("wordInput").value);
+      console.log(document.getElementById("wordInput").value);
+      document.getElementById("wordInput").value = ""
+      console.log(document.getElementById("wordInput").value);
+    }
+  }
+
   return (
     <Container style={{minHeight: "100vh", minWidth: "100vw"}} className="m-0 d-flex align-items-center justify-content-between">
       <div className="w-85 mx-5">
@@ -12,7 +32,7 @@ function Game(props) {
             return (<Row>
               {
                 e.map((e2, i2) => {
-                  return (<Col>{e2.word}</Col>);
+                  return (<Col className={`${e2.player?.color}`}>{e2.word}</Col>);
                 })
               }
             </Row>);
@@ -32,7 +52,7 @@ function Game(props) {
           </div>
         </div>
         <div className="control">
-          CONTROL
+          <input onKeyUp={inputKeyUp.bind(this)} id="wordInput" autoFocus={true} placeholder="Enter a word..." type="text" className="w-100"></input>
         </div>
       </div>
     </Container>
@@ -42,12 +62,13 @@ function Game(props) {
 function mapStateToProps(state) {
   return {
     openGames: state.openGames,
-    gameId: state.gameId
+    gameId: state.gameId,
+    socket: state.socket
   };
 }
 
 const mapDispatchToProps = {
-  
+  setOpenGames
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);

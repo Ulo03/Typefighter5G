@@ -111,10 +111,33 @@ io.on("connection", function(socket) { // neue Verbindung eines Clients
         for (let p of startingRoom.players) {
             p.color = colors[i];
             i++;
+            let currentSocket = io.sockets.sockets.get(p.socketID);
+            currentSocket.on(roomName + ":words", async function(word) {
+                await validateWord(startingRoom, word, p.socketID);
+                console.log("asdf=" + games[roomName].grid[4][4].word);
+                
+                io.to(roomName).emit("objects", games);
+                
+                console.log("emited game =" + roomName + ":object" );
+            });
         }
         startingRoom.started = true;
         io.emit("gameUpdate", games);
     });
+
+    async function validateWord(room, inputWord, playerSocketID) {
+        for (let i = 0; i < room.grid.length; i++) {
+            for (let j = 0; j < room.grid[0].length; j++) {
+                if (room.grid[i][j].word == inputWord) {
+                    console.log("word: " + room.grid[i][j].word);
+                    room.grid[i][j].player = users[playerSocketID];
+                    room.grid[i][j].player.name;
+                    room.grid[i][j].word = getRandomWord();
+                    console.log("newWord: " + room.grid[i][j].word);
+                }
+            }
+        }
+    }
 
     //gets random word that is not in startingRoom.grid
     function getRandomWord() {

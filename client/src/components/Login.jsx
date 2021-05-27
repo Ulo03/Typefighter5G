@@ -8,6 +8,7 @@ function Login(props) {
   useEffect(() => {
     console.log("login");
     const enterListener = event => {
+      console.log("enterListener event");
       if (event.code === "Enter" || event.code === "NumpadEnter") {
         console.log("Enter key was pressed. Run your function.");
         event.preventDefault();
@@ -15,8 +16,10 @@ function Login(props) {
       }
     };
     document.addEventListener("keydown", enterListener);
+    console.log("enterListener added");
     return () => {
       document.removeEventListener("keydown", enterListener);
+      console.log("enterListener removed");
     };
   },[]);
 
