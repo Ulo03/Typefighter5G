@@ -9,7 +9,7 @@ import { io } from "socket.io-client";
 const initialState = {
   username: "",
   socketURL: "http://127.0.0.1",
-  socket: io(),
+  socket: null,
   onlineCount: 0,
   host: 0,
   join: 0,
