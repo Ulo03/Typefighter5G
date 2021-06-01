@@ -8,7 +8,7 @@ import { io } from "socket.io-client";
 
 const initialState = {
   username: "",
-  socketURL: "http://127.0.0.1:" + (process.env.PORT || "3000"),
+  socketURL: "http://127.0.0.1",
   socket: null,
   onlineCount: 0,
   host: 0,
