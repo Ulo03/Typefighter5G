@@ -51,7 +51,6 @@ io.on("connection", function(socket) { // neue Verbindung eines Clients
             games[roomName].players.push(users[socket.id]);
             socket.join(roomName);
             console.log(users[socket.id].name + " joined Room -> " + games[roomName].name);
-            
             socket.emit("response", "200");
             io.emit("gameUpdate", games);
         } else {
