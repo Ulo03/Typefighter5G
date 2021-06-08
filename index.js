@@ -5,9 +5,6 @@ const http = require('http');
 const server = http.createServer(app);
 
 const randomWords = require('./words');
-const { defaultMaxListeners } = require('events');
-const { clear } = require('console');
-
 const io = require("socket.io")(server, {
     cors: {
         origin: "*",
