@@ -116,11 +116,16 @@ io.on("connection", function(socket) { // neue Verbindung eines Clients
             i++;
             let currentSocket = io.sockets.sockets.get(p.socketID);
             currentSocket.on(roomName + ":words", function(word) {
-                validateWord(startingRoom, word, p.socketID);     
+                if (!hasGameEnded(roomName)) {
+                    validateWord(startingRoom, word, p.socketID);    
+                }
                 if (hasGameEnded(roomName)) {
+                    clearScores(roomName);
                     startingRoom.ended = true;
                     startingRoom.started = false;
                     io.to(roomName).emit("gameUpdate", games);
+                } else {
+                    
                 }
                 io.to(roomName).emit("objects", games);
             });
