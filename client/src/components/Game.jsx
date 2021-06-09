@@ -14,7 +14,7 @@ function Game(props) {
 
   function inputKeyUp(event) {
     if (event.key === 'Enter') {
-      props.socket.emit(props.gameId + ":words", document.getElementById("wordInput").value);
+      props.socket.emit("words", document.getElementById("wordInput").value);
       console.log(document.getElementById("wordInput").value);
       document.getElementById("wordInput").value = ""
       console.log(document.getElementById("wordInput").value);

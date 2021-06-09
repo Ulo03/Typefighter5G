@@ -115,8 +115,8 @@ io.on("connection", function(socket) { // neue Verbindung eines Clients
             p.color = colors[i];
             i++;
             let currentSocket = io.sockets.sockets.get(p.socketID);
-            currentSocket.on(roomName + ":words", function(word) {
-                if (!hasGameEnded(roomName)) {
+            currentSocket.on("words", function(word) {
+                if (!startingRoom.ended == true) {
                     validateWord(startingRoom, word, p.socketID);    
                 }
                 if (hasGameEnded(roomName)) {
@@ -343,6 +343,6 @@ io.on("connection", function(socket) { // neue Verbindung eines Clients
     }
 });
 
-server.listen((process.env.PORT || 3000), () => {
+server.listen((process.env.PORT || 80), () => {
     console.log('listening on *:3000');
 });
