@@ -9,7 +9,7 @@ import Game from "./Game";
 function Typefighter(props) {
 
   useEffect(() => {
-    props.setSocket(io("localhost:80"));
+    props.setSocket(io());
   }, [props.socketURL]);
 
   useEffect(() => {

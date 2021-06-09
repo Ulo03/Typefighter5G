@@ -343,6 +343,6 @@ io.on("connection", function(socket) { // neue Verbindung eines Clients
     }
 });
 
-server.listen((process.env.PORT || 80), () => {
+server.listen((process.env.PORT || 3000), () => {
     console.log('listening on *:3000');
 });
