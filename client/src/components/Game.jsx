@@ -1,20 +1,20 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Container, Row, Col } from 'react-bootstrap';
-import { setOpenGames } from "../actions";
+import { setOpenGames, setGame } from "../actions";
 import './styles/Game.css';
 
 function Game(props) {
 
   useEffect(() => {
-    props.socket.on("objects", (newGames) => {
-      props.setOpenGames(newGames);
+    props.socket.on("game", (newGameName ,newGame) => {
+      props.setGame(newGameName, newGame);
     });
   });
 
   function inputKeyUp(event) {
     if (event.key === 'Enter') {
-      props.socket.emit(props.gameId + ":words", document.getElementById("wordInput").value);
+      props.socket.emit("words", document.getElementById("wordInput").value);
       console.log(document.getElementById("wordInput").value);
       document.getElementById("wordInput").value = ""
       console.log(document.getElementById("wordInput").value);
@@ -65,7 +65,8 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
-  setOpenGames
+  setOpenGames,
+  setGame
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);

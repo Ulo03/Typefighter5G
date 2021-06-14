@@ -112,8 +112,8 @@ io.on("connection", function(socket) { // neue Verbindung eines Clients
             p.color = colors[i];
             i++;
             let currentSocket = io.sockets.sockets.get(p.socketID);
-            currentSocket.on(roomName + ":words", function(word) {
-                if (!hasGameEnded(roomName)) {
+            currentSocket.on("words", function(word) {
+                if (!startingRoom.ended == true) {
                     validateWord(startingRoom, word, p.socketID);    
                 }
                 if (hasGameEnded(roomName)) {
@@ -124,7 +124,7 @@ io.on("connection", function(socket) { // neue Verbindung eines Clients
                 } else {
                     
                 }
-                io.to(roomName).emit("objects", games);
+                io.to(roomName).emit("game", startingRoom.name, startingRoom);
             });
         }
         startingRoom.ended = false;

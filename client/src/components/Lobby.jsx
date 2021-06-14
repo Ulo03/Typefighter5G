@@ -15,7 +15,6 @@ function Lobby(props) {
 
   function startGame() {
     props.socket.emit("startGame", props.gameId);
-    
   }
 
   return (

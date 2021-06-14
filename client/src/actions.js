@@ -54,3 +54,12 @@ export function setOnlineCount(count) {
     data: count
   }
 }
+
+export function setGame(gameName, game) {
+  return {
+    type: "SET_GAME",
+    data: {
+      gameName, game
+    }
+  }
+}

@@ -35,6 +35,11 @@ function reducer(state = initialState, action) {
       return { ...state, openGames: action.data };
     case "SET_ONLINE_COUNT":
       return { ...state, onlineCount: action.data };
+    case "SET_GAME":
+      return { ...state, openGames: {
+        ...state.openGames, 
+        [action.data.gameName]: action.data.game
+      }};
     default:
       return state;
   }
