@@ -127,7 +127,7 @@ io.on("connection", function(socket) { // neue Verbindung eines Clients
                 } else {
                     
                 }
-                io.to(roomName).emit("objects", games);
+                io.to(roomName).emit("game", startingRoom.name, startingRoom);
             });
         }
         startingRoom.ended = false;
