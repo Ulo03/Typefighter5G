@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Container, Row, Col } from 'react-bootstrap';
-import { setOpenGames, setGame } from "../actions";
+import { setOpenGames } from "../actions";
 import './styles/Game.css';
 
 function Game(props) {
 
   useEffect(() => {
-    props.socket.on("game", (newGameName ,newGame) => {
-      props.setGame(newGameName, newGame);
+    props.socket.on("objects", (newGames) => {
+      props.setOpenGames(newGames);
     });
   });
 
@@ -65,8 +65,7 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
-  setOpenGames,
-  setGame
+  setOpenGames
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);
