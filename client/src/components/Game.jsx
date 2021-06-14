@@ -49,7 +49,7 @@ function Game(props) {
           </div>
         </div>
         <div className="control">
-          <input onKeyUp={inputKeyUp.bind(this)} id="wordInput" autoFocus={true} placeholder="Enter a word..." type="text" className="w-100"></input>
+          <input onKeyUp={inputKeyUp.bind(this)} id="wordInput" autoComplete="off" autoFocus={true} placeholder="Enter a word..." type="text" className="w-100"></input>
         </div>
       </div>
     </Container>
